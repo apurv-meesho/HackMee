@@ -18,10 +18,10 @@ function Homepage() {
     const fetchData = async () => {
       try {
         const response = await fetch('http://localhost:8080/api/v1/reco'); 
-        const data = await response.json();
+        const data = (await response.json()).data;
         setRelations(data.relations);
         setOccasions(data.occasions);
-        setInterests(data.interests);
+        setInterests(data.categories);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
