@@ -12,37 +12,12 @@ function Homepage() {
   const [occasions, setOccasions] = useState([]);
   const [interests, setInterests] = useState([]);
 
-  useEffect(() => {
-    // Simulate an API call with static data
-    const fetchData = () => {
+    useEffect(() => {
+    // Fetch data from the API when the component mounts
+    const fetchData = async () => {
       try {
-        const data = {
-          "occasions": [
-            "Birthday", "Housewarming", "Just because", "Wedding", "Anniversary", "Thank you", 
-            "Graduation", "New Baby", "Get well soon", "Valentine's Day", "Mother's Day", "Father's Day"
-          ],
-          "categories": [
-            "Women Sarees", "Home Decor", "Unisex Personal Care", "Women Jewellery", "Women Watches", 
-            "Home improvement", "Soft Furnishings", "Fitness", "Mens Personal Care & Grooming", "Men Accessories", 
-            "Men Watches", "Men Sports Wear", "Women Bottom wear", "Men Bottom Wear", "Ethnic Bottomwear, Dupattas & Jackets", 
-            "Women Bags", "Women Accessories", "Women Sleepwear", "Women Top Wear", "Blouses", "Appliances", 
-            "Mobiles, Electronics Accessories & Small Appliances", "Men Night Wear", "Kids Footwear, Accs & Toys", 
-            "Men Ethnic Wear", "Men Footwear", "Women Innerwear", "Health & Wellness", "Women Suits & Dress Materials", 
-            "Women Personal Care & Makeup", "Kids Clothing", "Women Kurtis & Kurtas", "Men Winter Wear", "Men Bags", 
-            "Screen Protectors", "Kids Watches", "Kids Accessories", "Travel Bags ,Luggage and Accessories", 
-            "Womens Active Wear", "Pet Supplies", "Baby & Mother Personal Care", "Sports", "Maternity Wear", 
-            "Stationery", "Grocery", "Eye Utility", "Office Supplies", "Industrial & Scientific Products", 
-            "Musical Instruments", "Women Winter Wear", "Automotive Accessories", "Others", "Women Footwear", 
-            "Furniture", "Men Innerwear", "Kids Footwear", "Islamic Fashion", "Books", "Mandi", "Donations", 
-            "Digital", "Lehengas", "Kitchen Utility", "Men Top Wear", "Cases & Covers", "Consumer Electronics", 
-            "Personal Care & Wellness", "Education", "CPG"
-          ],
-          "relations": [
-            "Friend", "Husband", "Wife", "Partner", "Mum", "Dad", "Parent", "Baby", "Boyfriend", "Girlfriend", 
-            "Myself", "Daughter", "Son", "Child", "Grandchild", "Grandparent", "Sister", "Brother", "Sibling", 
-            "The Whole Family", "Teacher", "Coworker", "Neighbour", "Someone Else"
-          ]
-        };
+        const response = await fetch('http://localhost:8080/api/v1/reco'); 
+        const data = (await response.json()).data;
         setRelations(data.relations);
         setOccasions(data.occasions);
         setInterests(data.categories);
@@ -53,6 +28,48 @@ function Homepage() {
 
     fetchData();
   }, []);
+
+//   useEffect(() => {
+//     // Simulate an API call with static data
+//     const fetchData = () => {
+//       try {
+//         const data = {
+//           "occasions": [
+//             "Birthday", "Housewarming", "Just because", "Wedding", "Anniversary", "Thank you", 
+//             "Graduation", "New Baby", "Get well soon", "Valentine's Day", "Mother's Day", "Father's Day"
+//           ],
+//           "categories": [
+//             "Women Sarees", "Home Decor", "Unisex Personal Care", "Women Jewellery", "Women Watches", 
+//             "Home improvement", "Soft Furnishings", "Fitness", "Mens Personal Care & Grooming", "Men Accessories", 
+//             "Men Watches", "Men Sports Wear", "Women Bottom wear", "Men Bottom Wear", "Ethnic Bottomwear, Dupattas & Jackets", 
+//             "Women Bags", "Women Accessories", "Women Sleepwear", "Women Top Wear", "Blouses", "Appliances", 
+//             "Mobiles, Electronics Accessories & Small Appliances", "Men Night Wear", "Kids Footwear, Accs & Toys", 
+//             "Men Ethnic Wear", "Men Footwear", "Women Innerwear", "Health & Wellness", "Women Suits & Dress Materials", 
+//             "Women Personal Care & Makeup", "Kids Clothing", "Women Kurtis & Kurtas", "Men Winter Wear", "Men Bags", 
+//             "Screen Protectors", "Kids Watches", "Kids Accessories", "Travel Bags ,Luggage and Accessories", 
+//             "Womens Active Wear", "Pet Supplies", "Baby & Mother Personal Care", "Sports", "Maternity Wear", 
+//             "Stationery", "Grocery", "Eye Utility", "Office Supplies", "Industrial & Scientific Products", 
+//             "Musical Instruments", "Women Winter Wear", "Automotive Accessories", "Others", "Women Footwear", 
+//             "Furniture", "Men Innerwear", "Kids Footwear", "Islamic Fashion", "Books", "Mandi", "Donations", 
+//             "Digital", "Lehengas", "Kitchen Utility", "Men Top Wear", "Cases & Covers", "Consumer Electronics", 
+//             "Personal Care & Wellness", "Education", "CPG"
+//           ],
+//           "relations": [
+//             "Friend", "Husband", "Wife", "Partner", "Mum", "Dad", "Parent", "Baby", "Boyfriend", "Girlfriend", 
+//             "Myself", "Daughter", "Son", "Child", "Grandchild", "Grandparent", "Sister", "Brother", "Sibling", 
+//             "The Whole Family", "Teacher", "Coworker", "Neighbour", "Someone Else"
+//           ]
+//         };
+//         setRelations(data.relations);
+//         setOccasions(data.occasions);
+//         setInterests(data.categories);
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
 
   const openModal = () => {
     setIsModalOpen(!isModalOpen);
