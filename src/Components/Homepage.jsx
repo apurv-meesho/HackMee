@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
 import "./Homepage.css";
-// import AllGiftIdeas from "./AllGiftIdeas";
 
 function Homepage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -9,16 +8,41 @@ function Homepage() {
   const [occasionState, setOccasionState] = useState('');
   const [interestsArr, setInterestsArr] = useState([]);
 
-  const [relation, setRelations] = useState([]);
-  const [occasion, setOccasions] = useState([]);
+  const [relations, setRelations] = useState([]);
+  const [occasions, setOccasions] = useState([]);
   const [interests, setInterests] = useState([]);
 
   useEffect(() => {
-    // Fetch data from the API when the component mounts
-    const fetchData = async () => {
+    // Simulate an API call with static data
+    const fetchData = () => {
       try {
-        const response = await fetch('http://localhost:8080/api/v1/reco'); 
-        const data = (await response.json()).data;
+        const data = {
+          "occasions": [
+            "Birthday", "Housewarming", "Just because", "Wedding", "Anniversary", "Thank you", 
+            "Graduation", "New Baby", "Get well soon", "Valentine's Day", "Mother's Day", "Father's Day"
+          ],
+          "categories": [
+            "Women Sarees", "Home Decor", "Unisex Personal Care", "Women Jewellery", "Women Watches", 
+            "Home improvement", "Soft Furnishings", "Fitness", "Mens Personal Care & Grooming", "Men Accessories", 
+            "Men Watches", "Men Sports Wear", "Women Bottom wear", "Men Bottom Wear", "Ethnic Bottomwear, Dupattas & Jackets", 
+            "Women Bags", "Women Accessories", "Women Sleepwear", "Women Top Wear", "Blouses", "Appliances", 
+            "Mobiles, Electronics Accessories & Small Appliances", "Men Night Wear", "Kids Footwear, Accs & Toys", 
+            "Men Ethnic Wear", "Men Footwear", "Women Innerwear", "Health & Wellness", "Women Suits & Dress Materials", 
+            "Women Personal Care & Makeup", "Kids Clothing", "Women Kurtis & Kurtas", "Men Winter Wear", "Men Bags", 
+            "Screen Protectors", "Kids Watches", "Kids Accessories", "Travel Bags ,Luggage and Accessories", 
+            "Womens Active Wear", "Pet Supplies", "Baby & Mother Personal Care", "Sports", "Maternity Wear", 
+            "Stationery", "Grocery", "Eye Utility", "Office Supplies", "Industrial & Scientific Products", 
+            "Musical Instruments", "Women Winter Wear", "Automotive Accessories", "Others", "Women Footwear", 
+            "Furniture", "Men Innerwear", "Kids Footwear", "Islamic Fashion", "Books", "Mandi", "Donations", 
+            "Digital", "Lehengas", "Kitchen Utility", "Men Top Wear", "Cases & Covers", "Consumer Electronics", 
+            "Personal Care & Wellness", "Education", "CPG"
+          ],
+          "relations": [
+            "Friend", "Husband", "Wife", "Partner", "Mum", "Dad", "Parent", "Baby", "Boyfriend", "Girlfriend", 
+            "Myself", "Daughter", "Son", "Child", "Grandchild", "Grandparent", "Sister", "Brother", "Sibling", 
+            "The Whole Family", "Teacher", "Coworker", "Neighbour", "Someone Else"
+          ]
+        };
         setRelations(data.relations);
         setOccasions(data.occasions);
         setInterests(data.categories);
@@ -31,132 +55,84 @@ function Homepage() {
   }, []);
 
   const openModal = () => {
-    console.log("Current State : ", isModalOpen);
     setIsModalOpen(!isModalOpen);
   };
 
   const closeModal = () => {
+    setInterestsArr([]);
+    setRelationState('');
+    setOccasionState('');
     setIsModalOpen(false);
   };
 
   const handleSubmit = () => {
     if (interestsArr.length < 3) {
-        alert("Please select at least three interests.");
-        return; // Exit function if condition is not met
-      }
-  }
+      alert("Please select at least three interests.");
+      return; // Exit function if condition is not met
+    }
+  };
 
-//   const relation = ["Mother", "Girlfriend", "Father"];
-//   const occasion = ["Birthday", "father's Day", "Valentine"]
-//   const interests = ["Crafting & Creativity", "Great Food", "Crafting & Creativity", "Great Food", "Crafting & Creativity", "Great Food"]
   return (
     <>
-      {/* <button onClick={openModal}>Open Modal</button> */}
-      <h1 style={{ textAlign: "left", paddingLeft: "20px", marginLeft: "auto",
-          marginRight: "auto", width: "80%",}}>Explore Gifts</h1>
-      <div
-        // className="open-modal-container"
-        style={{
-        //   display: "flex",
-        //   justifyContent: "center",
-        //   alignItems: "center",
-        //   height: "100vh",
-        
-          borderRadius: "10px",
-        //   padding: "20px",
-          border: "1px solid #f0f0f0",
-          width: "80%",
-          marginLeft: "auto",
-          marginRight: "auto",
-        //   flexDirection: "column",
-        }}
-      >
-        
+      <h1 style={{ textAlign: "left", paddingLeft: "20px", marginLeft: "auto", marginRight: "auto", width: "80%" }}>
+        Explore Gifts
+      </h1>
+      <div style={{ borderRadius: "10px", border: "1px solid #f0f0f0", width: "80%", marginLeft: "auto", marginRight: "auto" }}>
         <h4 style={{ textAlign: "left", paddingLeft: "20px" }}>Who are you shopping for?</h4>
-            <div className="themes" style={{ textAlign: "left", paddingLeft: "20px" }}>
-              {relation.map((theme) => (
-                <div className={relationState === theme ? "theme selectedTheme" : "theme"}
-                onClick={() => setRelationState(theme)}>{theme}</div>
-              ))}
-              <div className="theme" onClick={openModal} style={{backgroundColor: "#d34da5", border: "2.5px solid #9f2089", color: "white"}}>Next Question</div>
+        <div className="themes" style={{ textAlign: "left", paddingLeft: "20px" }}>
+          {relations.map((theme) => (
+            <div key={theme} className={relationState === theme ? "theme selectedTheme" : "theme"} 
+                 onClick={() => setRelationState(theme)}>
+              {theme}
             </div>
+          ))}
+          <div className="theme" onClick={openModal} style={{ backgroundColor: "#d34da5", border: "2.5px solid #9f2089", color: "white" }}>
+            Next Question
+          </div>
+        </div>
       </div>
 
       {isModalOpen && (
-        <div
-          className="modal"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "fixed",
-            zIndex: 1,
-            left: 0,
-            top: 0,
-            width: "100%",
-            height: "100%",
-            overflow: "auto",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              backgroundColor: "#fff",
-              padding: "20px",
-              border: "1px solid #888",
-              width: "80%",
-              maxWidth: "500px",
-              borderRadius: "10px",
-              textAlign: "left",
-            }}
-          >
-            <span
-              className="close-button"
-              onClick={closeModal}
-              style={{ cursor: "pointer" }}
-            >
-              &times;
-            </span>
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close-button" onClick={closeModal}>&times;</span>
             <h2>Find fantastic gifts in a flash!</h2>
-            <p>
-              Tell us more about who you're shopping for and we'll match you
-              with thoughtful gifts - just for them.
-            </p>
+            <p>Tell us more about who you're shopping for and we'll match you with thoughtful gifts - just for them.</p>
             <h4>Who are you shopping for?</h4>
             <div className="themes">
-              {relation.map((theme) => (
-                <div 
-                key={theme}
-                  className={relationState === theme ? "theme selectedTheme" : "theme"}
-                  onClick={() => setRelationState(theme)}
-                >{theme}</div>
+              {relations.map((theme) => (
+                <div key={theme} className={relationState === theme ? "theme selectedTheme" : "theme"}
+                     onClick={() => setRelationState(theme)}>
+                  {theme}
+                </div>
               ))}
             </div>
 
             <h4>What's the occasion?</h4>
             <div className="themes">
-              {occasion.map((theme) => (
-                <div key={theme}
-                className={occasionState === theme ? "theme selectedTheme" : "theme"}
-                onClick={() => setOccasionState(theme)}>{theme}</div>
+              {occasions.map((theme) => (
+                <div key={theme} className={occasionState === theme ? "theme selectedTheme" : "theme"}
+                     onClick={() => setOccasionState(theme)}>
+                  {theme}
+                </div>
               ))}
             </div>
             <h4>What are they into?</h4>
             <p>Choose three or more for better suggestions</p>
             <div className="themes">
               {interests.map((theme) => (
-                <div 
-                className={interestsArr.includes(theme) ? "theme selectedTheme" : "theme"}
-                onClick={() => {
-                  setInterestsArr((prev) => {
-                    if (prev.includes(theme)) {
-                      return prev.filter((item) => item !== theme);
-                    } else {
-                      return [...prev, theme];
-                    }
-                  });
-                }}>{theme}</div>
+                <div key={theme} className={interestsArr.includes(theme) ? "theme selectedTheme" : "theme"}
+                     onClick={() => {
+                       setInterestsArr((prev) => {
+                         if (prev.includes(theme)) {
+                           return prev.filter((item) => item !== theme);
+                         } else {
+                           return [...prev, theme];
+                         }
+                       });
+                     }}>
+                  {theme}
+                </div>
               ))}
             </div>
 
@@ -167,7 +143,6 @@ function Homepage() {
           </div>
         </div>
       )}
-      {/* <AllGiftIdeas /> */}
     </>
   );
 }
