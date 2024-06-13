@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../App.css";
 import "./Homepage.css";
 // import AllGiftIdeas from "./AllGiftIdeas";
@@ -8,6 +8,27 @@ function Homepage() {
   const [relationState, setRelationState] = useState('');
   const [occasionState, setOccasionState] = useState('');
   const [interestsArr, setInterestsArr] = useState([]);
+
+  const [relation, setRelations] = useState([]);
+  const [occasion, setOccasions] = useState([]);
+  const [interests, setInterests] = useState([]);
+
+  useEffect(() => {
+    // Fetch data from the API when the component mounts
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/v1/reco'); 
+        const data = await response.json();
+        setRelations(data.relations);
+        setOccasions(data.occasions);
+        setInterests(data.interests);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const openModal = () => {
     console.log("Current State : ", isModalOpen);
@@ -25,9 +46,9 @@ function Homepage() {
       }
   }
 
-  const relation = ["Mother", "Girlfriend", "Father"];
-  const occasion = ["Birthday", "father's Day", "Valentine"]
-  const interests = ["Crafting & Creativity", "Great Food", "Crafting & Creativity", "Great Food", "Crafting & Creativity", "Great Food"]
+//   const relation = ["Mother", "Girlfriend", "Father"];
+//   const occasion = ["Birthday", "father's Day", "Valentine"]
+//   const interests = ["Crafting & Creativity", "Great Food", "Crafting & Creativity", "Great Food", "Crafting & Creativity", "Great Food"]
   return (
     <>
       {/* <button onClick={openModal}>Open Modal</button> */}
