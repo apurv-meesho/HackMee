@@ -1,0 +1,21 @@
+.theme {
+    display: inline-block;
+    margin-right: 0.5rem;
+    background-color: #f0f0f0;
+    /* padding: 0.25rem 0.5rem; */
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .themes {
+    margin-bottom: 0.5rem;
+  }
+  /* .selectedTheme {
+    background-color: #d34da5; border: 4px solid #9f2089; color: white;
+  } */
+  .selectedTheme {
+    border: 1px solid black; ;
+  }
+  
