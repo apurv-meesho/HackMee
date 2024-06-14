@@ -1,71 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { RowWiseCategoryResponse } from './dummy';
-// import { Popover, OverlayTrigger } from 'react-bootstrap'; // Ensure correct import
+import axios from 'axios';
 
 function RowWiseCategory({ relationState, occasionState, category, colorsInd }) {
     const [catalogs, setCatalogs] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
         const fetchCatalogsInitial = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/v1/suggest', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: {
-                        occasion: occasionState,
-                        relation: relationState,
-                        category: category,
-                    },
+                const response = await axios.post('http://localhost:8080/api/v1/suggest', {
+                    occasion: occasionState,
+                    relation: relationState,
+                    category: category,
                 });
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const data = await response.json();
-                console.log(data); // Log the response data
-                setCatalogs(data.data);
-                // Simulating API response with dummy data
-                // setCatalogs(RowWiseCategoryResponse.data);
+                console.log("Fetched data:", response.data.data);
+                setCatalogs(response.data.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
         fetchCatalogsInitial();
-    }, []);
-
-    const [currentIndex, setCurrentIndex] = useState(0);
+    }, [occasionState, relationState, category]);
 
     const fetchCatalogs = async (pageNo) => {
         try {
-            const response = await fetch('http://localhost:8080/api/v1/suggest', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    occasion: occasionState,
-                    relation: relationState,
-                    category: category,
-                    pageNo: pageNo,
-                }),
+            const response = await axios.post('http://localhost:8080/api/v1/suggest', {
+                occasion: occasionState,
+                relation: relationState,
+                category: category,
+                pageNo: pageNo,
             });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-            console.log(data); // Log the response data
-            setCatalogs((prevCatalogs) => [...prevCatalogs, ...data.data]); // Append new data to the existing catalogs
-            setCurrentIndex(currentIndex + 5);
-
-            // Simulating API response with dummy data
-            // setCatalogs((prevCatalogs) => [...prevCatalogs, ...RowWiseCategoryResponse.data]);
-            // setCurrentIndex(currentIndex + 5);
+            console.log("Fetched additional data:", response.data.data);
+            setCatalogs((prevCatalogs) => [...prevCatalogs, ...response.data.data]);
+            setCurrentIndex((prevIndex) => prevIndex + 5);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -74,29 +44,19 @@ function RowWiseCategory({ relationState, occasionState, category, colorsInd }) 
     const handleNext = () => {
         if (currentIndex + 10 < catalogs.length) {
             setCurrentIndex(currentIndex + 5);
-        } else {
+        } else if (catalogs.length > 0) {
             fetchCatalogs(catalogs[currentIndex].pageNo + 1);
         }
     };
 
     const displayedGifts = catalogs.slice(currentIndex, currentIndex + 5);
 
-    // const colors = ["#2c1cbd", "#bd571c", "#b0ab27", "#21a642"];
     const colors = [
         "#6b5b95", // Soft Purple
         "#feb236", // Apricot
         "#d64161", // Cherry Red
         "#ff7b25", // Carrot Orange
     ];
-
-    // const renderPopover = (gift) => (
-    //     <Popover id={`popover-${gift.id}`}>
-    //         <Popover.Title as="h3">{gift.catalog_name}</Popover.Title>
-    //         <Popover.Content>
-    //             {gift.description}
-    //         </Popover.Content>
-    //     </Popover>
-    // );
 
     return (
         <div style={styles.giftContainer}>
@@ -109,16 +69,9 @@ function RowWiseCategory({ relationState, occasionState, category, colorsInd }) 
                 {category}
             </div>
             {displayedGifts.map((gift) => (
-                // <OverlayTrigger
-                //     key={gift.id}
-                //     trigger={['hover', 'focus']}
-                //     placement="bottom"
-                //     overlay={renderPopover(gift)}
-                // >
-                    <div key={gift.id} style={styles.giftCard} >
-                        <img src={gift.gif_url} alt={`Gift ${gift.catalogId}`} style={styles.giftImage} onClick={() => window.location.href = gift.landing_page} />
-                    </div>
-                // </OverlayTrigger>
+                <div key={gift.catalog_id} style={styles.giftCard} >
+                    <img src={gift.gif_url} alt={`Gift `} style={styles.giftImage} onClick={() => window.location.href = gift.landing_page} />
+                </div>
             ))}
             {currentIndex + 5 < catalogs.length && (
                 <button onClick={handleNext} style={styles.nextButton}>
