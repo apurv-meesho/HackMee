@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
 import "./Homepage.css";
+import { useNavigate } from "react-router-dom";
+// import Modal from "./Modal";
 
 function Homepage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -11,6 +13,8 @@ function Homepage() {
   const [relations, setRelations] = useState([]);
   const [occasions, setOccasions] = useState([]);
   const [interests, setInterests] = useState([]);
+
+  const navigate = useNavigate();
 
     useEffect(() => {
     // Fetch data from the API when the component mounts
@@ -87,6 +91,7 @@ function Homepage() {
       alert("Please select at least three interests.");
       return; // Exit function if condition is not met
     }
+    navigate('/gift', { state: { relationState, occasionState, interestsArr } });
   };
 
   return (
@@ -108,6 +113,7 @@ function Homepage() {
           </div>
         </div>
       </div>
+      {/* {isModalOpen && <Modal relation={relationState}/>} */}
 
       {isModalOpen && (
         <div className="modal">
@@ -127,9 +133,9 @@ function Homepage() {
 
             <h4>What's the occasion?</h4>
             <div className="themes">
-              {occasions.map((theme) => (
-                <div key={theme} className={occasionState === theme ? "theme selectedTheme" : "theme"}
-                     onClick={() => setOccasionState(theme)}>
+              {occasions.map((theme, index) => (
+                <div key={theme} className={occasionState === index ? "theme selectedTheme" : "theme"}
+                     onClick={() => setOccasionState(index)}>
                   {theme}
                 </div>
               ))}
@@ -143,8 +149,15 @@ function Homepage() {
                        setInterestsArr((prev) => {
                          if (prev.includes(theme)) {
                            return prev.filter((item) => item !== theme);
-                         } else {
-                           return [...prev, theme];
+                         } 
+                        //  else {
+                        //    return [...prev, theme];
+                        //  }
+                         else if(prev.length < 8){
+                            return [...prev, theme];
+                         }
+                         else{
+                            return prev;
                          }
                        });
                      }}>
@@ -160,6 +173,7 @@ function Homepage() {
           </div>
         </div>
       )}
+      
     </>
   );
 }

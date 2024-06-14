@@ -1,62 +1,64 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import RowWiseCategory from "./RowWiseCategory";
+// import { giftIdeasResponse } from "./dummy";
+import { useNavigate } from "react-router-dom";
 function GiftIdeas() {
-  const gifts = [
-    { id: 1, imageUrl: 'https://via.placeholder.com/100x200?text=Gift1' },
-    { id: 2, imageUrl: 'https://via.placeholder.com/100x200?text=Gift2' },
-    { id: 3, imageUrl: 'https://via.placeholder.com/100x200?text=Gift3' },
-    { id: 4, imageUrl: 'https://via.placeholder.com/100x200?text=Gift4' },
-    { id: 5, imageUrl: 'https://via.placeholder.com/100x200?text=Gift5' },
-    { id: 6, imageUrl: 'https://via.placeholder.com/100x200?text=Gift6' },
-    { id: 7, imageUrl: 'https://via.placeholder.com/100x200?text=Gift7' },
-    { id: 8, imageUrl: 'https://via.placeholder.com/100x200?text=Gift8' },
-    { id: 9, imageUrl: 'https://via.placeholder.com/100x200?text=Gift9' },
-    { id: 10, imageUrl: 'https://via.placeholder.com/100x200?text=Gift10' },
-    { id: 11, imageUrl: 'https://via.placeholder.com/100x200?text=Gift11' },
-    { id: 12, imageUrl: 'https://via.placeholder.com/100x200?text=Gift12' },
-  ];
+    const location = useLocation();
+  const { relationState, occasionState, interestsArr } = location.state || {};
+  const navigate = useNavigate();
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+//   useEffect(() => {
+//     console.log("Relation State:", relationState);
+//     console.log("Occasion State:", occasionState);
+//     console.log("Interests Array:", interestsArr);
+//   }, [relationState, occasionState, interestsArr]);
+//   const gifts = [
+//     { id: 1, imageUrl: 'https://via.placeholder.com/100x200?text=Gift1' },
+//     { id: 2, imageUrl: 'https://via.placeholder.com/100x200?text=Gift2' },
+//     { id: 3, imageUrl: 'https://via.placeholder.com/100x200?text=Gift3' },
+//     { id: 4, imageUrl: 'https://via.placeholder.com/100x200?text=Gift4' },
+//     { id: 5, imageUrl: 'https://via.placeholder.com/100x200?text=Gift5' },
+//     { id: 6, imageUrl: 'https://via.placeholder.com/100x200?text=Gift6' },
+//     { id: 7, imageUrl: 'https://via.placeholder.com/100x200?text=Gift7' },
+//     { id: 8, imageUrl: 'https://via.placeholder.com/100x200?text=Gift8' },
+//     { id: 9, imageUrl: 'https://via.placeholder.com/100x200?text=Gift9' },
+//     { id: 10, imageUrl: 'https://via.placeholder.com/100x200?text=Gift10' },
+//     { id: 11, imageUrl: 'https://via.placeholder.com/100x200?text=Gift11' },
+//     { id: 12, imageUrl: 'https://via.placeholder.com/100x200?text=Gift12' },
+//   ];
 
-  const handleNext = () => {
-    if (currentIndex + 6 < gifts.length) {
-      setCurrentIndex(currentIndex + 6);
-    }
-  };
+//   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const displayedGifts = gifts.slice(currentIndex, currentIndex + 6);
+//   const handleNext = () => {
+//     if (currentIndex + 6 < gifts.length) {
+//       setCurrentIndex(currentIndex + 6);
+//     }
+//   };
 
-  const colors = ["#2c1cbd", "#bd571c", "#b0ab27", "#21a642"];
-  const [colorsInd, setColorsInd] = useState(0);
+//   const displayedGifts = gifts.slice(currentIndex, currentIndex + 6);
+
+//   const colors = ["#2c1cbd", "#bd571c", "#b0ab27", "#21a642"];
+//   const [colorsInd, setColorsInd] = useState(0);
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h2>Gift Ideas</h2>
-        <button style={styles.editButton}>Edit Responses</button>
+        <h1>Gift Ideas for <b style={{color:"#d34da5"}}>{relationState}</b></h1>
+        <button style={styles.editButton} onClick={()=>{navigate('/');}}>Change Responses</button>
       </div>
 
       <p style={{marginTop:"0"}}>Based On Your Responses</p>
-      <div style={styles.giftContainer}>
-        <div
-          style={{
-            ...styles.hikerCard,
-            backgroundColor: colors[colorsInd],
-          }}
-        >
-          The Hiker
-        </div>
-        {displayedGifts.map((gift) => (
-          <div key={gift.id} style={styles.giftCard}>
-            <img src={gift.imageUrl} alt={`Gift ${gift.id}`} style={styles.giftImage} />
-          </div>
-        ))}
-        {currentIndex + 6 < gifts.length && (
-          <button onClick={handleNext} style={styles.nextButton}>
-            &gt;
-          </button>
-        )}
-      </div>
+      {interestsArr && interestsArr.map((interest, index) => (
+        <RowWiseCategory 
+          key={index}
+          colorsInd={index % 4}
+          relationState={relationState} 
+          occasionState={occasionState} 
+          category={interest} 
+        //   catalogArr={giftIdeasResponse[interest]}
+        />
+      ))}
     </div>
   );
 }
