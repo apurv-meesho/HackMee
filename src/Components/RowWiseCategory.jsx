@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { RowWiseCategoryResponse } from './dummy';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 // import { Popover, OverlayTrigger } from 'react-bootstrap'; // Ensure correct import
 
 function RowWiseCategory({ relationState, occasionState, category, colorsInd }) {
@@ -9,19 +11,19 @@ function RowWiseCategory({ relationState, occasionState, category, colorsInd }) 
         const fetchCatalogsInitial = async () => {
             try {
                 const response = await fetch('http://localhost:8080/api/v1/suggest', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: {
-                        occasion: occasionState,
-                        relation: relationState,
-                        category: category,
-                    },
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: {
+                occasion: occasionState,
+                relation: relationState,
+                category: category,
+                },
                 });
 
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                throw new Error('Network response was not ok');
                 }
 
                 const data = await response.json();
@@ -109,22 +111,22 @@ function RowWiseCategory({ relationState, occasionState, category, colorsInd }) 
                 {category}
             </div>
             {displayedGifts.map((gift) => (
-                // <OverlayTrigger
-                //     key={gift.id}
-                //     trigger={['hover', 'focus']}
-                //     placement="bottom"
-                //     overlay={renderPopover(gift)}
-                // >
-                    <div key={gift.id} style={styles.giftCard} >
+                <OverlayTrigger
+                    key={gift.id}
+                    placement="bottom"
+                    overlay={<Tooltip id={`tooltip-${gift.id}`}>{gift.catalog_name}, {gift.rating} <span role="img" aria-label="star">⭐</span></Tooltip>}
+                >
+                    <div key={gift.id} style={styles.giftCard}>
                         <img src={gift.gif_url} alt={`Gift ${gift.catalogId}`} style={styles.giftImage} onClick={() => window.location.href = gift.landing_page} />
                     </div>
-                // </OverlayTrigger>
+                </OverlayTrigger>
             ))}
             {currentIndex + 5 < catalogs.length && (
                 <button onClick={handleNext} style={styles.nextButton}>
                     &gt;
                 </button>
             )}
+
         </div>
     );
 }
@@ -133,7 +135,7 @@ const styles = {
     giftContainer: {
         display: "flex",
         alignItems: "center",
-        marginBottom: "20px"
+        marginBottom: "40px"
     },
     hikerCard: {
         height: "360px",
