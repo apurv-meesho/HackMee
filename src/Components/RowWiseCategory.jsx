@@ -59,6 +59,7 @@ function RowWiseCategory({
           category: category,
           pageNo: pageNo,
         },
+        
       });
 
       if (!response.ok) {
@@ -82,7 +83,7 @@ function RowWiseCategory({
     if (currentIndex + 10 < catalogs.length) {
       setCurrentIndex(currentIndex + 5);
     } else {
-      fetchCatalogs(catalogs[currentIndex].pageNo + 1);
+      fetchCatalogs(catalogs[currentIndex].page_no + 1);
     }
   };
 
